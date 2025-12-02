@@ -19,8 +19,13 @@ jobs:
     name: manual benchmark - ${{ inputs.qdrant_version }} - ${{ inputs.dataset }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: webfactory/ssh-agent@v0.8.0
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@df199fb7be9f65074067a9eb93f12bb4c5547cf2 # v2.13.3
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: step-security/ssh-agent@e0d707bd9ce1ec5725e45bd639f7dc60dbc82b39 # v0.9.2
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       - name: Benches
